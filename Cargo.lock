@@ -7,6 +7,7 @@ name = "aoc2023"
 version = "0.1.0"
 dependencies = [
  "nom",
+ "winnow",
 ]
 
 [[package]]
@@ -29,4 +30,13 @@ checksum = "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
 dependencies = [
  "memchr",
  "minimal-lexical",
+]
+
+[[package]]
+name = "winnow"
+version = "0.5.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "829846f3e3db426d4cee4510841b71a8e58aa2a76b1132579487ae430ccd9c7b"
+dependencies = [
+ "memchr",
 ]

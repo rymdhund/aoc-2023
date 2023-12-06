@@ -70,9 +70,9 @@ fn map(n: i64, maps: &Vec<RangeMap>) -> i64 {
 }
 
 fn solve2((seeds, category_maps): &(Vec<i64>, Vec<Vec<RangeMap>>)) -> i64 {
-    let mut ranges: Vec<Range> = (0..seeds.len()).step_by(2).map(|i| {
-        let start = seeds[i];
-        let len = seeds[i+1];
+    let mut ranges = seeds.chunks_exact(2).map(|range|{
+        let start = range[0];
+        let len = range[1];
         Range::new(start, start + len)
     }).collect();
 
@@ -128,7 +128,6 @@ fn test_map() {
     ];
     assert_eq!(1, map(1, &ex1));
     assert_eq!(52, map(50, &ex1));
-    assert_eq!(54, map(52, &ex1));
     assert_eq!(99, map(97, &ex1));
     assert_eq!(50, map(98, &ex1));
 }

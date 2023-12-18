@@ -1,14 +1,14 @@
 pub mod coord {
-    use std::ops::{Add, Sub};
+    use std::ops::{Add, Sub, Mul};
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
     pub struct Coord {
-        x: i32,
-        y: i32,
+        pub x: i64,
+        pub y: i64,
     }
 
     impl Coord {
-        pub fn new(x: i32, y: i32) -> Self {
+        pub fn new(x: i64, y: i64) -> Self {
             Coord {x, y}
         }
 
@@ -66,6 +66,14 @@ pub mod coord {
         }
     }
 
+    impl Mul<i64> for Coord {
+        type Output = Self;
+
+        fn mul(self, rhs: i64) -> Self::Output {
+            Coord::new(self.x * rhs, self.y * rhs)
+        }
+    }
+
     #[derive(Hash, PartialEq, Eq, Clone, Copy)]
     pub enum Dir {
         Right,
@@ -109,7 +117,7 @@ pub mod coord {
         fn print(&self);
     }
 
-    impl<T> CoordMap<T> for Vec<Vec<T>> where T: std::fmt::Debug {
+    impl<T> CoordMap<T> for Vec<Vec<T>> where T: std::fmt::Debug + std::fmt::Display {
         fn at(&self, p: Coord) -> &T {
             let y: usize = p.y.try_into().unwrap();
             let x: usize = p.x.try_into().unwrap();
@@ -122,7 +130,7 @@ pub mod coord {
 
         fn print(&self) {
             for row in self {
-                row.iter().for_each(|x| print!("{x:?}"));
+                row.iter().for_each(|x| print!("{x}"));
                 println!("");
             }
         }

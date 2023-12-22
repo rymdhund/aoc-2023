@@ -12,6 +12,10 @@ pub mod coord {
             Coord {x, y}
         }
 
+        pub fn new_u(x: usize, y: usize) -> Self {
+            Coord { x: x.try_into().unwrap(), y: y.try_into().unwrap()}
+        }
+
         pub fn up() -> Coord {
             Coord::new(0, -1)
         }

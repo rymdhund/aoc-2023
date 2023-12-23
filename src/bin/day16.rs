@@ -53,7 +53,7 @@ fn solve1(map: &Vec<Vec<char>>, start: (i32, i32, i32)) -> usize {
             _ => panic!("unexpected"),
         }
     }
-    seen.iter().map(|&(x, y, d)| (x, y)).collect::<HashSet<(i32, i32)>>().len()
+    seen.iter().map(|&(x, y, _)| (x, y)).collect::<HashSet<(i32, i32)>>().len()
 }
 
 fn solve2(map: &Vec<Vec<char>>) -> usize {

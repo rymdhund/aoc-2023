@@ -11,7 +11,7 @@ fn parse(file: &str) -> Vec<Vec<u8>> {
 fn astar(map: &Vec<Vec<u8>>, min_steps: usize, max_steps: usize) -> usize {
     let width = map.len();
     let start = Coord::new(0, 0);
-    let goal = Coord::new(width as i32 -1, width as i32 -1);
+    let goal = Coord::new_u(width - 1, width - 1);
     let mut open = DoublePriorityQueue::new();
     open.push((start, Dir::Right), 0);
     open.push((start, Dir::Down), 0);
@@ -53,8 +53,8 @@ fn neighbours(map: &Vec<Vec<u8>>, min_steps: usize, max_steps: usize, pos: Coord
         }
         cost += *map.at(p2) as usize;
         if n >= min_steps {
-            res.push(((p2, dir.turnLeft()), cost));
-            res.push(((p2, dir.turnRight()), cost));
+            res.push(((p2, dir.turn_left()), cost));
+            res.push(((p2, dir.turn_right()), cost));
         }
     }
     res

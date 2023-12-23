@@ -1,12 +1,5 @@
 use std::fs;
 
-fn print(b: &Vec<Vec<char>>) {
-    for row in b {
-        println!("{}", row.iter().collect::<String>());
-    }
-    println!("\n");
-}
-
 fn parse(file: &str) -> Vec<Vec<char>> {
     fs::read_to_string(file).unwrap().trim().lines().map(|line| {
         line.chars().collect()

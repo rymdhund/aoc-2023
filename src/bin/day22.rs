@@ -72,7 +72,7 @@ impl Brick {
 }
 
 fn parse(file: &str) -> Vec<Brick> {
-    std::fs::read_to_string(file).unwrap().trim().lines().enumerate().map(|(id, line)| {
+    std::fs::read_to_string(file).unwrap().trim().lines().map(|line| {
         let mut parts = line.split('~');
         let a = parse_coord(parts.next().unwrap());
         let b = parse_coord(parts.next().unwrap());

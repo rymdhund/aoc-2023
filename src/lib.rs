@@ -1,6 +1,8 @@
 pub mod coord {
     use std::ops::{Add, Sub, Mul};
 
+    use itertools::Itertools;
+
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
     pub struct Coord {
         pub x: i64,
@@ -51,6 +53,16 @@ pub mod coord {
 
         pub fn manhattan(&self) -> usize {
             (self.x.abs() + self.y.abs()).try_into().unwrap()
+        }
+
+        pub fn neighbours(&self) -> Vec<Coord> {
+            (0..4).map(|d| {
+                *self + Coord::dir(Dir::of_id(d))
+            }).collect_vec()
+        }
+        
+        pub fn go(&self, d: Dir) -> Coord {
+            *self + Coord::dir(d)
         }
     }
 
@@ -106,11 +118,11 @@ pub mod coord {
             }
         }
 
-        pub fn turnLeft(self) -> Dir {
+        pub fn turn_left(self) -> Dir {
             Self::of_id((self.id() + 3) % 4)
         }
 
-        pub fn turnRight(self) -> Dir {
+        pub fn turn_right(self) -> Dir {
             Self::of_id((self.id() + 1) % 4)
         }
     }
@@ -118,10 +130,9 @@ pub mod coord {
     pub trait CoordMap<T> {
         fn at(&self, p: Coord) -> &T;
         fn contains(&self, p: Coord) -> bool;
-        fn print(&self);
     }
 
-    impl<T> CoordMap<T> for Vec<Vec<T>> where T: std::fmt::Debug + std::fmt::Display {
+    impl<T> CoordMap<T> for Vec<Vec<T>> {
         fn at(&self, p: Coord) -> &T {
             let y: usize = p.y.try_into().unwrap();
             let x: usize = p.x.try_into().unwrap();
@@ -131,12 +142,38 @@ pub mod coord {
         fn contains(&self, p: Coord) -> bool {
             p.x >= 0 && p.y >= 0 && p.x < self[0].len().try_into().unwrap() && p.y < self.len().try_into().unwrap()
         }
+    }
 
-        fn print(&self) {
-            for row in self {
-                row.iter().for_each(|x| print!("{x}"));
-                println!("");
-            }
+    pub fn print_char_map(map: &Vec<Vec<char>>) {
+        for row in map {
+            row.iter().for_each(|x| print!("{x}"));
+            println!("");
+        }
+    }
+
+    pub struct Bitmask {
+        masks: Vec<u64>
+    }
+
+    impl Bitmask {
+        pub fn new(size: usize) -> Bitmask {
+            Bitmask { masks: vec![0; size / 64 + 1] }
+        }
+
+        pub fn contains(&self, idx: usize) -> bool {
+            self.masks[idx / 64] & (1 << (idx % 64)) != 0
+        }
+
+        pub fn add(&mut self, idx: usize) {
+            let i = idx / 64;
+            let v = 1 << (idx % 64);
+            self.masks[i] |= v;
+        }
+
+        pub fn rm(&mut self, idx: usize) {
+            let i = idx / 64;
+            let v = 1 << (idx % 64);
+            self.masks[i] &= !v;
         }
     }
 }
